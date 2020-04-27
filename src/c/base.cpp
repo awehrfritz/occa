@@ -45,13 +45,15 @@ void OCCA_RFUNC occaFinish() {
   occa::finish();
 }
 
-occaStream OCCA_RFUNC occaCreateStream(occaProperties props) {
-  occa::stream stream;
-  if (occa::c::isDefault(props)) {
-    stream = occa::createStream();
-  } else {
-    stream = occa::createStream(occa::c::properties(props));
-  }
+occaStream OCCA_RFUNC occaCreateStream() {
+  occa::stream stream = occa::createStream();
+  stream.dontUseRefs();
+
+  return occa::c::newOccaType(stream);
+}
+
+occaStream OCCA_RFUNC occaCreateStreamProps(occaProperties props) {
+  occa::stream stream = occa::createStream(occa::c::properties(props));
   stream.dontUseRefs();
 
   return occa::c::newOccaType(stream);
@@ -85,54 +87,60 @@ double OCCA_RFUNC occaTimeBetweenTags(occaStreamTag startTag,
 
 //---[ Kernel ]-------------------------
 occaKernel OCCA_RFUNC occaBuildKernel(const char *filename,
-                                      const char *kernelName,
-                                      const occaProperties props) {
-  occa::kernel kernel;
+                                      const char *kernelName) {
+  occa::kernel kernel = occa::buildKernel(filename,
+                                          kernelName);
+  kernel.dontUseRefs();
 
-  if (occa::c::isDefault(props)) {
-    kernel = occa::buildKernel(filename,
-                               kernelName);
-  } else {
-    kernel = occa::buildKernel(filename,
-                               kernelName,
-                               occa::c::properties(props));
-  }
+  return occa::c::newOccaType(kernel);
+}
+
+occaKernel OCCA_RFUNC occaBuildKernelProps(const char *filename,
+                                           const char *kernelName,
+                                           const occaProperties props) {
+  occa::kernel kernel = occa::buildKernel(filename,
+                                          kernelName,
+                                          occa::c::properties(props));
   kernel.dontUseRefs();
 
   return occa::c::newOccaType(kernel);
 }
 
 occaKernel OCCA_RFUNC occaBuildKernelFromString(const char *source,
-                                                const char *kernelName,
-                                                const occaProperties props) {
-  occa::kernel kernel;
+                                                const char *kernelName) {
+  occa::kernel kernel = occa::buildKernelFromString(source,
+                                                    kernelName);
+  kernel.dontUseRefs();
 
-  if (occa::c::isDefault(props)) {
-    kernel = occa::buildKernelFromString(source,
-                                         kernelName);
-  } else {
-    kernel = occa::buildKernelFromString(source,
-                                         kernelName,
-                                         occa::c::properties(props));
-  }
+  return occa::c::newOccaType(kernel);
+}
+
+occaKernel OCCA_RFUNC occaBuildKernelFromStringProps(const char *source,
+                                                     const char *kernelName,
+                                                     const occaProperties props) {
+  occa::kernel kernel = occa::buildKernelFromString(source,
+                                                    kernelName,
+                                                    occa::c::properties(props));
   kernel.dontUseRefs();
 
   return occa::c::newOccaType(kernel);
 }
 
 occaKernel OCCA_RFUNC occaBuildKernelFromBinary(const char *filename,
-                                                const char *kernelName,
-                                                const occaProperties props) {
-  occa::kernel kernel;
+                                                const char *kernelName) {
+  occa::kernel kernel = occa::buildKernelFromBinary(filename,
+                                                    kernelName);
+  kernel.dontUseRefs();
 
-  if (occa::c::isDefault(props)) {
-    kernel = occa::buildKernelFromBinary(filename,
-                                         kernelName);
-  } else {
-    kernel = occa::buildKernelFromBinary(filename,
-                                         kernelName,
-                                         occa::c::properties(props));
-  }
+  return occa::c::newOccaType(kernel);
+}
+
+occaKernel OCCA_RFUNC occaBuildKernelFromBinaryProps(const char *filename,
+                                                     const char *kernelName,
+                                                     const occaProperties props) {
+  occa::kernel kernel = occa::buildKernelFromBinary(filename,
+                                                    kernelName,
+                                                    occa::c::properties(props));
   kernel.dontUseRefs();
 
   return occa::c::newOccaType(kernel);
@@ -141,17 +149,19 @@ occaKernel OCCA_RFUNC occaBuildKernelFromBinary(const char *filename,
 
 //---[ Memory ]-------------------------
 occaMemory OCCA_RFUNC occaMalloc(const occaUDim_t bytes,
-                                 const void *src,
-                                 occaProperties props) {
-  occa::memory memory;
+                                 const void *src) {
+  occa::memory memory = occa::malloc(bytes, src);
+  memory.dontUseRefs();
 
-  if (occa::c::isDefault(props)) {
-    memory = occa::malloc(bytes, src);
-  } else {
-    memory = occa::malloc(bytes,
-                          src,
-                          occa::c::properties(props));
-  }
+  return occa::c::newOccaType(memory);
+}
+
+occaMemory OCCA_RFUNC occaMallocProps(const occaUDim_t bytes,
+                                      const void *src,
+                                      occaProperties props) {
+  occa::memory memory = occa::malloc(bytes,
+                                     src,
+                                     occa::c::properties(props));
   memory.dontUseRefs();
 
   return occa::c::newOccaType(memory);
@@ -159,33 +169,42 @@ occaMemory OCCA_RFUNC occaMalloc(const occaUDim_t bytes,
 
 occaMemory OCCA_RFUNC occaTypedMalloc(const occaUDim_t entries,
                                       const occaDtype dtype,
-                                      const void *src,
-                                      occaProperties props) {
+                                      const void *src) {
   const occa::dtype_t &dtype_ = occa::c::dtype(dtype);
 
-  occa::memory memory;
-  if (occa::c::isDefault(props)) {
-    memory = occa::malloc(entries, dtype_, src);
-  } else {
-    memory = occa::malloc(entries,
-                          dtype_,
-                          src,
-                          occa::c::properties(props));
-  }
+  occa::memory memory = occa::malloc(entries, dtype_, src);
+  memory.dontUseRefs();
+
+  return occa::c::newOccaType(memory);
+}
+
+occaMemory OCCA_RFUNC occaTypedMallocProps(const occaUDim_t entries,
+                                           const occaDtype dtype,
+                                           const void *src,
+                                           occaProperties props) {
+  const occa::dtype_t &dtype_ = occa::c::dtype(dtype);
+
+  occa::memory memory = occa::malloc(entries,
+                              dtype_,
+                              src,
+                              occa::c::properties(props));
   memory.dontUseRefs();
 
   return occa::c::newOccaType(memory);
 }
 
 void* OCCA_RFUNC occaUMalloc(const occaUDim_t bytes,
-                             const void *src,
-                             occaProperties props) {
+                             const void *src) {
 
-  if (occa::c::isDefault(props)) {
-    return occa::umalloc(bytes,
-                         occa::dtype::byte,
-                         src);
-  }
+  return occa::umalloc(bytes,
+                       occa::dtype::byte,
+                       src);
+}
+
+void* OCCA_RFUNC occaUMallocProps(const occaUDim_t bytes,
+                                  const void *src,
+                                  occaProperties props) {
+
   return occa::umalloc(bytes,
                        occa::dtype::byte,
                        src,
@@ -194,13 +213,18 @@ void* OCCA_RFUNC occaUMalloc(const occaUDim_t bytes,
 
 void* OCCA_RFUNC occaTypedUMalloc(const occaUDim_t entries,
                                   const occaDtype dtype,
-                                  const void *src,
-                                  occaProperties props) {
+                                  const void *src) {
   const occa::dtype_t &dtype_ = occa::c::dtype(dtype);
 
-  if (occa::c::isDefault(props)) {
-    return occa::umalloc(entries, dtype_, src);
-  }
+  return occa::umalloc(entries, dtype_, src);
+}
+
+void* OCCA_RFUNC occaTypedUMallocProps(const occaUDim_t entries,
+                                       const occaDtype dtype,
+                                       const void *src,
+                                       occaProperties props) {
+  const occa::dtype_t &dtype_ = occa::c::dtype(dtype);
+
   return occa::umalloc(entries,
                        dtype_,
                        src,

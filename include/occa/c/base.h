@@ -27,7 +27,9 @@ OCCA_LFUNC void OCCA_RFUNC occaLoadKernels(const char *library);
 
 OCCA_LFUNC void OCCA_RFUNC occaFinish();
 
-OCCA_LFUNC occaStream OCCA_RFUNC occaCreateStream(occaProperties props);
+OCCA_LFUNC occaStream OCCA_RFUNC occaCreateStream();
+
+OCCA_LFUNC occaStream OCCA_RFUNC occaCreateStreamProps(occaProperties props);
 
 OCCA_LFUNC occaStream OCCA_RFUNC occaGetStream();
 
@@ -43,36 +45,59 @@ OCCA_LFUNC double OCCA_RFUNC occaTimeBetweenTags(occaStreamTag startTag,
 
 //---[ Kernel ]-------------------------
 OCCA_LFUNC occaKernel OCCA_RFUNC occaBuildKernel(const char *filename,
-                                                 const char *kernelName,
-                                                 const occaProperties props);
+                                                 const char *kernelName);
+
+OCCA_LFUNC occaKernel OCCA_RFUNC occaBuildKernelProps(const char *filename,
+                                                      const char *kernelName,
+                                                      const occaProperties props);
 
 OCCA_LFUNC occaKernel OCCA_RFUNC occaBuildKernelFromString(const char *source,
-                                                           const char *kernelName,
-                                                           const occaProperties props);
+                                                           const char *kernelName);
+
+OCCA_LFUNC occaKernel OCCA_RFUNC occaBuildKernelFromStringProps(const char *source,
+                                                                const char *kernelName,
+                                                                const occaProperties props);
 
 OCCA_LFUNC occaKernel OCCA_RFUNC occaBuildKernelFromBinary(const char *filename,
-                                                           const char *kernelName,
-                                                           const occaProperties props);
+                                                           const char *kernelName);
+
+OCCA_LFUNC occaKernel OCCA_RFUNC occaBuildKernelFromBinaryProps(const char *filename,
+                                                                const char *kernelName,
+                                                                const occaProperties props);
 //======================================
 
 //---[ Memory ]-------------------------
 OCCA_LFUNC occaMemory OCCA_RFUNC occaMalloc(const occaUDim_t bytes,
-                                            const void *src,
-                                            occaProperties props);
+                                            const void *src);
 
-OCCA_LFUNC occaMemory OCCA_RFUNC occaTypedMalloc(const occaUDim_t entries,
-                                                 const occaDtype type,
+OCCA_LFUNC occaMemory OCCA_RFUNC occaMallocProps(const occaUDim_t bytes,
                                                  const void *src,
                                                  occaProperties props);
 
+OCCA_LFUNC occaMemory OCCA_RFUNC occaTypedMalloc(const occaUDim_t entries,
+                                                 const occaDtype type,
+                                                 const void *src);
+
+OCCA_LFUNC occaMemory OCCA_RFUNC occaTypedMallocProps(const occaUDim_t entries,
+                                                      const occaDtype type,
+                                                      const void *src,
+                                                      occaProperties props);
+
 OCCA_LFUNC void* OCCA_RFUNC occaUMalloc(const occaUDim_t bytes,
-                                        const void *src,
-                                        occaProperties props);
+                                        const void *src);
+
+OCCA_LFUNC void* OCCA_RFUNC occaUMallocProps(const occaUDim_t bytes,
+                                             const void *src,
+                                             occaProperties props);
 
 OCCA_LFUNC void* OCCA_RFUNC occaTypedUMalloc(const occaUDim_t entries,
                                              const occaDtype type,
-                                             const void *src,
-                                             occaProperties props);
+                                             const void *src);
+
+OCCA_LFUNC void* OCCA_RFUNC occaTypedUMallocProps(const occaUDim_t entries,
+                                                  const occaDtype type,
+                                                  const void *src,
+                                                  occaProperties props);
 //======================================
 
 OCCA_END_EXTERN_C
