@@ -173,11 +173,12 @@ picFlag      = $(call compilerPicFlag)
 sharedFlag   = $(call compilerSharedFlag)
 pthreadFlag  = $(call compilerPthreadFlag)
 
-# Workaround for GitHub Actions CI tests on Ubuntu using GCC 8 and 9.
-# https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables
+# Workaround for GitHub Actions CI tests on Ubuntu using GCC.
 ifdef GITHUB_ACTIONS
-  ifeq ($(OCCA_CI_FIX_GCC_FLAGS),1)
-    releaseFlags := $(filter-out -march=native,$(releaseFlags))
+  ifeq ($(usingLinux),1)
+    ifeq ($(vendor),GCC)
+      releaseFlags := $(filter-out -march=native,$(releaseFlags))
+    endif
   endif
 endif
 #=================================================

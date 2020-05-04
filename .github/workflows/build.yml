@@ -16,14 +16,12 @@ jobs:
             CC: gcc-8
             CXX: g++-8
             OCCA_COVERAGE: 1
-            OCCA_CI_FIX_GCC_FLAGS: 1
 
           - name: (Ubuntu) gcc-9
             os: ubuntu-18.04
             CC: gcc-9
             CXX: g++-9
             OCCA_COVERAGE: 1
-            OCCA_CI_FIX_GCC_FLAGS: 1
 
           - name: (Ubuntu) clang-6
             os: ubuntu-18.04
@@ -56,7 +54,6 @@ jobs:
       CC: ${{ matrix.CC }}
       CXX: ${{ matrix.CXX }}
       OCCA_COVERAGE: ${{ matrix.OCCA_COVERAGE }}
-      OCCA_CI_FIX_GCC_FLAGS: ${{ matrix.OCCA_CI_FIX_GCC_FLAGS }}
 
     steps:
     - uses: actions/checkout@v2
